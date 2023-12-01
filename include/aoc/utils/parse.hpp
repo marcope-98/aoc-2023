@@ -1,5 +1,5 @@
-#ifndef AOC_PARSE_HPP_
-#define AOC_PARSE_HPP_
+#ifndef AOC_UTILS_PARSE_HPP_
+#define AOC_UTILS_PARSE_HPP_
 
 #include <cstdint>
 #include <fstream>
@@ -41,4 +41,4 @@ namespace aoc
     }
   };
 } // namespace aoc
-#endif // AOC_PARSE_HPP_
+#endif // AOC_UTILS_PARSE_HPP_
