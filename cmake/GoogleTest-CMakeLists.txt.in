@@ -1,0 +1,25 @@
+get_filename_component(HMM_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+list(APPEND CMAKE_MODULE_PATH ${HMM_CMAKE_DIR})
+
+if(NOT TARGET hmm::hmm)
+    include("${HMM_CMAKE_DIR}/hmmTargets.cmake")
+endif()
+
+set(HMM_LIBRARIES hmm::hmm)marcope@marcope-HP-Notebook:~/Desktop/devel/HMM/cmake$ cat GoogleTest-CMakeLists.txt.in 
+cmake_minimum_required(VERSION 3.5.0)
+
+project(googletest-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(googletest
+    GIT_REPOSITORY    https://github.com/google/googletest.git
+    GIT_TAG           v1.13.x
+    SOURCE_DIR        "${CMAKE_BINARY_DIR}/googletest-src"
+    BINARY_DIR        "${CMAKE_BINARY_DIR}/googletest-build"
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND     ""
+    INSTALL_COMMAND   ""
+    TEST_COMMAND      ""
+)

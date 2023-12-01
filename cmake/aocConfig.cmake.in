@@ -1,0 +1,10 @@
+get_filename_component(AOC_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+list(APPEND CMAKE_MODULE_PATH ${AOC_CMAKE_DIR})
+
+if(NOT TARGET aoc::aoc)
+    include("${AOC_CMAKE_DIR}/aocTargets.cmake")
+endif()
+
+set(AOC_LIBRARIES aoc::aoc)
