@@ -34,6 +34,7 @@ endif()
 
 add_executable(aoc_test
     src/day01-test.cpp
+    src/day02-test.cpp
     src/main.cpp)
 
 target_link_libraries(aoc_test gtest aoc::aoc)
