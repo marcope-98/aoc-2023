@@ -42,18 +42,20 @@ namespace aoc
     static bool        contains(const std::string &source, const std::string &pattern) { return source.find(pattern) != std::string::npos; }
     static std::size_t find_character(const std::string &line, const std::string &character) { return line.find(character); }
 
-    static std::vector<std::string> split_by_delimiter(std::string line, const std::string &delimiter)
+    static std::vector<std::string> split_by_delimiters(std::string line, const std::string &delimiters)
     {
       std::size_t              pos = 0;
       std::string              token;
       std::vector<std::string> out;
-      while ((pos = line.find(delimiter)) != std::string::npos)
+      while ((pos = line.find_first_of(delimiters)) != std::string::npos)
       {
-        token = line.substr(0, pos);
-        line.erase(0, pos + delimiter.length());
-        out.emplace_back(trim(token));
+        token = trim(line.substr(0, pos));
+        line.erase(0, pos + 1);
+        if (!token.empty()) out.emplace_back(token);
       }
-      out.emplace_back(trim(line));
+      token = trim(line);
+      if (!token.empty()) out.emplace_back(token);
+
       return out;
     }
   };
