@@ -8,7 +8,6 @@ static std::unordered_map<std::string, std::size_t> hashmap = {{"red", 12}, {"gr
 
 static bool is_game_feasible(const std::string &input)
 {
-#if 1
   std::vector<std::string> game = aoc::parse::split_by_delimiters(input, ";, ");
   for (std::size_t i = 0; i < game.size(); i += 2)
     if (hashmap[game[i + 1]] < std::stoull(game[i]))
