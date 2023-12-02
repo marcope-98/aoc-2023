@@ -3,6 +3,7 @@
 // stl
 #include <vector>
 // aoc/utils
+#include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
 static std::string hashmap[10] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
@@ -35,8 +36,8 @@ static std::string remove_letters(const std::string &str)
 
 std::size_t aoc::day01::part1(const std::string &filename)
 {
-  std::vector<std::string> input = aoc::parse::cvt_file_to_vstring(filename);
-  std::size_t              sum   = 0;
+  aoc::vstring input = aoc::parse::cvt_file_to_vstring(filename);
+  std::size_t  sum   = 0;
   for (const auto &elem : input)
   {
     std::string temp = remove_letters(elem);
@@ -47,7 +48,7 @@ std::size_t aoc::day01::part1(const std::string &filename)
 
 std::size_t aoc::day01::part2(const std::string &filename)
 {
-  std::vector<std::string> input = aoc::parse::cvt_file_to_vstring(filename);
+  aoc::vstring input = aoc::parse::cvt_file_to_vstring(filename);
 
   std::size_t sum = 0;
   for (const auto &elem : input)

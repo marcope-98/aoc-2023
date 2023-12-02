@@ -1,63 +1,19 @@
 #ifndef AOC_UTILS_PARSE_HPP_
 #define AOC_UTILS_PARSE_HPP_
 
-#include <cstdint>
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <vector>
+
+#include "aoc/utils/aliases.hpp"
 
 namespace aoc
 {
   struct parse
   {
-    static std::string ltrim(std::string s, const char *t = " \t\n\r\f\v")
-    {
-      s.erase(0, s.find_first_not_of(t));
-      return s;
-    }
-
-    static std::string rtrim(std::string s, const char *t = " \t\n\r\f\v")
-    {
-      s.erase(s.find_last_not_of(t) + 1);
-      return s;
-    }
-
-    static std::string trim(std::string s, const char *t = " \t\n\r\f\v")
-    {
-      return ltrim(rtrim(s, t), t);
-    }
-
-    static std::vector<std::string> cvt_file_to_vstring(const std::string &path)
-    {
-      std::ifstream            file(path);
-      std::vector<std::string> out{};
-      std::string              line{};
-      while (getline(file, line))
-        out.emplace_back(line);
-      file.close();
-      return out;
-    }
-
-    static bool        contains(const std::string &source, const std::string &pattern) { return source.find(pattern) != std::string::npos; }
-    static std::size_t find_character(const std::string &line, const std::string &character) { return line.find(character); }
-
-    static std::vector<std::string> split_by_delimiters(std::string line, const std::string &delimiters)
-    {
-      std::size_t              pos = 0;
-      std::string              token;
-      std::vector<std::string> out;
-      while ((pos = line.find_first_of(delimiters)) != std::string::npos)
-      {
-        token = trim(line.substr(0, pos));
-        line.erase(0, pos + 1);
-        if (!token.empty()) out.emplace_back(token);
-      }
-      token = trim(line);
-      if (!token.empty()) out.emplace_back(token);
-
-      return out;
-    }
+    static std::string ltrim(std::string s, const char *t = " \t\n\r\f\v");
+    static std::string rtrim(std::string s, const char *t = " \t\n\r\f\v");
+    static std::string trim(std::string s, const char *t = " \t\n\r\f\v");
+    static vstring     cvt_file_to_vstring(const std::string &path);
+    static vstring     split_by_delimiters(std::string line, const std::string &delimiters);
   };
 } // namespace aoc
 #endif // AOC_UTILS_PARSE_HPP_
