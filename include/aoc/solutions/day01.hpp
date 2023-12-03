@@ -12,4 +12,5 @@ namespace aoc
     static std::size_t part2(const std::string &filename);
   };
 } // namespace aoc
-#endif
+
+#endif // AOC_SOLUTIONS_DAY01_HPP_

@@ -1,0 +1,75 @@
+{
+    "aoc-day-hpp": {
+        "scope": "cpp",
+        "prefix": "aoc-hpp",
+        "body": [
+            "#ifndef AOC_SOLUTIONS_DAY${XX}_HPP_",
+            "#define AOC_SOLUTIONS_DAY${XX}_HPP_",
+            "",
+            "#include <cstdint>",
+            "#include <string>",
+            "",
+            "namespace aoc",
+            "{",
+            "\tstruct day${XX}",
+            "\t{",
+            "\t\tstatic std::size_t part1(const std::string &filename);",
+            "\t\tstatic std::size_t part2(const std::string &filename);",
+            "\t};",
+            "} // namespace aoc",
+            "",
+            "#endif // AOC_SOLUTIONS_DAY${XX}_HPP_"
+        ]
+    },
+    "aoc-day-cpp": {
+        "scope": "cpp",
+        "prefix": "aoc-cpp",
+        "body": [
+            "#include \"aoc/solutions/day${XX}.hpp\"",
+            "",
+            "#include \"aoc/utils/aliases.hpp\"",
+            "#include \"aoc/utils/parse.hpp\"",
+            "",
+            "std::size_t aoc::day${XX}::part1(const std::string &filename)",
+            "{",
+            "\taoc::vstring input = aoc::parse::cvt_file_to_vstring(filename);",
+            "\tstd::size_t result = 0;"
+            "",
+            "\treturn result;"
+            "}",
+            "",
+            "std::size_t aoc::day${XX}::part2(const std::string &filename)",
+            "{",
+            "\taoc::vstring input = aoc::parse::cvt_file_to_vstring(filename);",
+            "\tstd::size_t result = 0;"
+            "",
+            "\treturn result;"
+            "}"
+        ]
+    },
+    "aoc-day-test": {
+        "scope": "cpp",
+        "prefix": "aoc-test",
+        "body": [
+            "#include <gtest/gtest.h>",
+            "",
+            "#include \"aoc/solutions/day${XX}.hpp\"",
+            "",
+            "#include <string>",
+            "",
+            "TEST(day${XX}, part1)",
+            "{",
+            "\tstd::string base = std::string(TXT_FILE_DIR);"
+            "\tASSERT_EQ(aoc::day${XX}::part1(base + \"day${XX}/sample.txt\"), 0)",
+            "\tASSERT_EQ(aoc::day${XX}::part1(base + \"day${XX}/input.txt\"), 0)",
+            "}",
+            "",
+            "TEST(day${XX}, part2)",
+            "{",
+            "\tstd::string base = std::string(TXT_FILE_DIR);"
+            "\tASSERT_EQ(aoc::day${XX}::part2(base + \"day${XX}/sample.txt\"), 0)",
+            "\tASSERT_EQ(aoc::day${XX}::part2(base + \"day${XX}/input.txt\"), 0)",
+            "}"
+        ]
+    }
+}
