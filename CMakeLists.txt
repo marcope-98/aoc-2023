@@ -13,6 +13,7 @@ add_library(${LIBRARY_NAME}
     src/utils/parse.cpp
     ${AOC_SOLUTIONS_DIR}/day01.cpp
     ${AOC_SOLUTIONS_DIR}/day02.cpp
+    ${AOC_SOLUTIONS_DIR}/day03.cpp
 )
 
 add_library(${LIBRARY_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
