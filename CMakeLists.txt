@@ -14,6 +14,7 @@ add_library(${LIBRARY_NAME}
     ${AOC_SOLUTIONS_DIR}/day01.cpp
     ${AOC_SOLUTIONS_DIR}/day02.cpp
     ${AOC_SOLUTIONS_DIR}/day03.cpp
+    ${AOC_SOLUTIONS_DIR}/day04.cpp
 )
 
 add_library(${LIBRARY_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
