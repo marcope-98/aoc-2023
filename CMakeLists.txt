@@ -11,10 +11,12 @@ set(AOC_SOLUTIONS_DIR src/solutions)
 add_library(${LIBRARY_NAME}
     STATIC
     src/utils/parse.cpp
+    src/utils/Range.cpp
     ${AOC_SOLUTIONS_DIR}/day01.cpp
     ${AOC_SOLUTIONS_DIR}/day02.cpp
     ${AOC_SOLUTIONS_DIR}/day03.cpp
     ${AOC_SOLUTIONS_DIR}/day04.cpp
+    ${AOC_SOLUTIONS_DIR}/day05.cpp
 )
 
 add_library(${LIBRARY_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
