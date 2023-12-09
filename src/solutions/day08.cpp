@@ -21,18 +21,6 @@ struct Dirs
   std::string right;
 };
 
-struct Task
-{
-  std::size_t offset{0};
-  std::size_t period{0};
-
-  void simulate_till(const std::size_t &time)
-  {
-    while (this->offset < time)
-      this->offset += this->period;
-  }
-};
-
 template<typename Key, typename Value>
 using HashMap = std::unordered_map<Key, Value>;
 
@@ -70,15 +58,7 @@ struct Node
   bool is_ZZZ() const { return this->current == "ZZZ"; }
   bool is_loop() const { return this->loop_condition; }
 
-  Task get_loop_metadata() const
-  {
-    std::size_t offset = 0;
-    std::size_t index  = this->hashmap.find(this->current)->second;
-    for (std::size_t i = index; i < this->visited.size(); ++i)
-      if (this->visited[i].back() == 'Z')
-        offset = i;
-    return {offset, this->visited.size() - index};
-  }
+  std::size_t loop() const { return this->visited.size() - this->hashmap.find(this->current)->second; }
 
   void step(const std::string &sequence, const HashMap<std::string, Dirs> &graph)
   {
@@ -147,21 +127,9 @@ std::size_t aoc::day08::part2(const std::string &filename)
     for (auto &node : nodes)
       node.step(sequence, graph);
 
-  std::vector<Task> tasks;
+  std::size_t result = 1;
   for (const auto &node : nodes)
-    tasks.emplace_back(node.get_loop_metadata());
+    result = lcm(result, node.loop());
 
-  std::size_t start = std::max_element(tasks.begin(), tasks.end(),
-                                       [](const Task &a, const Task &b)
-                                       { return a.offset < b.offset; })
-                          ->offset;
-
-  Task t = {0, 1};
-  for (auto &task : tasks)
-  {
-    task.simulate_till(start);
-    t.period = lcm(t.period, gcd(task.period, task.offset));
-  }
-
-  return t.period * sequence.size();
+  return result * sequence.size();
 }
