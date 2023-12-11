@@ -1,5 +1,6 @@
 #include "aoc/utils/parse.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <fstream>
 
@@ -16,6 +17,18 @@ std::string aoc::parse::rtrim(std::string s, const char *t)
 }
 
 std::string aoc::parse::trim(std::string s, const char *t) { return ltrim(rtrim(s, t), t); }
+
+std::string aoc::parse::replace(std::string s, const std::string &from, const char &to)
+{
+  std::transform(s.begin(), s.end(), s.begin(), [from, to](const char &c)
+                 {
+                   for (const auto &character : from)
+                     if (c == character)
+                       return to;
+                   return c;
+                 });
+  return s;
+}
 
 aoc::vstring aoc::parse::cvt_file_to_vstring(const std::string &path)
 {
@@ -46,5 +59,14 @@ aoc::vstring aoc::parse::split_by_delimiters(std::string line, const std::string
   token = trim(line);
   if (!token.empty()) out.emplace_back(token);
 
+  return out;
+}
+
+aoc::vstring aoc::parse::transpose(const vstring &input)
+{
+  aoc::vstring out(input[0].size());
+  for (const auto &line : input)
+    for (std::size_t j = 0; j < line.size(); ++j)
+      out[j] += line[j];
   return out;
 }
