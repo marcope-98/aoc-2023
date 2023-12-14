@@ -3,6 +3,7 @@
 #include <algorithm>
 
 bool aoc::Range::contains(const Range &range) const { return this->d_begin <= range.d_begin && range.d_end <= this->d_end; }
+bool aoc::Range::intersects(const Range &range) const { return !((*this < range) || (*this > range)); }
 
 std::vector<aoc::Range> aoc::Range::split(const Range &range) const
 {

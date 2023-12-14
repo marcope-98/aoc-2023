@@ -2,6 +2,7 @@
 #define AOC_UTILS_RANGE_HPP_
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 namespace aoc
@@ -21,6 +22,7 @@ namespace aoc
 
     bool operator==(const Range &range) const;
     bool contains(const Range &range) const;
+    bool intersects(const Range &range) const;
 
     Range operator+(const Range &range) const;
     Range operator-(const Range &range) const;
@@ -38,6 +40,15 @@ namespace aoc
     std::size_t &end() { return this->d_end; }
 
     std::vector<Range> split(const Range &range) const;
+    std::size_t        distance(const Range &range) const
+    {
+      if (*this > range)
+        return this->d_begin - range.d_end;
+      else
+        return range.d_begin - this->d_end;
+    }
+
+    std::string to_string() const { return std::to_string(this->d_begin) + "," + std::to_string(this->d_end); }
 
   private:
   private:
