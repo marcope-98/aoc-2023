@@ -7,6 +7,6 @@
 namespace aoc
 {
   using vstring = std::vector<std::string>;
-}
+} // namespace aoc
 
 #endif
