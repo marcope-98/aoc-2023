@@ -1,7 +1,6 @@
 #include "aoc/utils/parse.hpp"
 
 #include <algorithm>
-#include <cstdint>
 #include <fstream>
 
 std::string aoc::parse::ltrim(std::string s, const char *t)
@@ -64,9 +63,43 @@ aoc::vstring aoc::parse::split_by_delimiters(std::string line, const std::string
 
 aoc::vstring aoc::parse::transpose(const vstring &input)
 {
+  if (input.empty()) return aoc::vstring();
   aoc::vstring out(input[0].size());
   for (const auto &line : input)
     for (std::size_t j = 0; j < line.size(); ++j)
       out[j] += line[j];
+
+  return out;
+}
+
+std::vector<std::size_t> aoc::parse::find_all(const std::string &str, const char &needle)
+{
+  std::vector<std::size_t> out;
+  for (std::size_t i = 0; i < str.size(); ++i)
+    if (str[i] == needle)
+      out.emplace_back(i);
+  return out;
+}
+
+std::string aoc::parse::concatenate(const vstring &input)
+{
+  std::string out;
+  for (const auto &elem : input)
+    out += elem;
+  return out;
+}
+
+aoc::vstring aoc::parse::fliplr(const aoc::vstring &input)
+{
+  aoc::vstring out(input);
+  for (auto &line : out)
+    std::reverse(line.begin(), line.end());
+  return out;
+}
+
+aoc::vstring aoc::parse::flipud(const vstring &input)
+{
+  aoc::vstring out(input);
+  std::reverse(out.begin(), out.end());
   return out;
 }

@@ -46,6 +46,7 @@ add_executable(aoc_test
     src/day11-test.cpp
     src/day12-test.cpp
     src/day13-test.cpp
+    src/day14-test.cpp
     src/main.cpp)
 
 target_link_libraries(aoc_test gtest aoc::aoc)
