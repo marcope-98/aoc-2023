@@ -6,76 +6,79 @@
 #include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
-struct Map
+namespace
 {
-  aoc::vstring data;
-
-  Map() = default;
-  explicit Map(const aoc::vstring &input) : data(input)
+  struct Map
   {
-    this->data = aoc::parse::flipud(aoc::parse::transpose(this->data)); // counter clockwise
-  }
+    aoc::vstring data;
 
-  std::string to_string() const { return aoc::parse::concatenate(this->data); }
-
-  void tilt()
-  {
-    this->ragged_left();
-    this->data = aoc::parse::fliplr(aoc::parse::transpose(this->data)); // clockwise
-  }
-
-  void ragged_left()
-  {
-    for (auto &line : this->data)
+    Map() = default;
+    explicit Map(const aoc::vstring &input) : data(input)
     {
-      auto at = line.begin();
-      for (auto it = line.begin(); it != line.end();)
-      {
-        switch (*it)
-        {
-          case 'O':
-            *at++ = *it++;
-            break;
-          case '#':
-            if (*at == '#')
-              *at++ = *it++;
-            else
-              *at++ = '.';
-            break;
-          default:
-            it++;
-            break;
-        }
-      }
-      while (at != line.end())
-        *at++ = '.';
+      this->data = aoc::parse::flipud(aoc::parse::transpose(this->data)); // counter clockwise
     }
-  }
 
-  std::size_t load() const
-  {
-    std::size_t result = 0;
-    for (const auto &line : this->data)
-      for (std::size_t i = 0; i < line.size(); ++i)
-        if (line[i] == 'O')
-          result += line.size() - i;
-    return result;
-  }
+    std::string to_string() const { return aoc::parse::concatenate(this->data); }
 
-  void cycle()
-  {
-    for (std::size_t i = 0; i < 4; ++i)
-      this->tilt();
-  }
+    void tilt()
+    {
+      this->ragged_left();
+      this->data = aoc::parse::fliplr(aoc::parse::transpose(this->data)); // clockwise
+    }
 
-  void print() const
-  {
-    aoc::vstring temp(this->data);
-    temp = aoc::parse::fliplr(aoc::parse::transpose(temp));
-    for (const auto &line : temp)
-      std::cerr << line << "\n";
-  }
-};
+    void ragged_left()
+    {
+      for (auto &line : this->data)
+      {
+        auto at = line.begin();
+        for (auto it = line.begin(); it != line.end();)
+        {
+          switch (*it)
+          {
+            case 'O':
+              *at++ = *it++;
+              break;
+            case '#':
+              if (*at == '#')
+                *at++ = *it++;
+              else
+                *at++ = '.';
+              break;
+            default:
+              it++;
+              break;
+          }
+        }
+        while (at != line.end())
+          *at++ = '.';
+      }
+    }
+
+    std::size_t load() const
+    {
+      std::size_t result = 0;
+      for (const auto &line : this->data)
+        for (std::size_t i = 0; i < line.size(); ++i)
+          if (line[i] == 'O')
+            result += line.size() - i;
+      return result;
+    }
+
+    void cycle()
+    {
+      for (std::size_t i = 0; i < 4; ++i)
+        this->tilt();
+    }
+
+    void print() const
+    {
+      aoc::vstring temp(this->data);
+      temp = aoc::parse::fliplr(aoc::parse::transpose(temp));
+      for (const auto &line : temp)
+        std::cerr << line << "\n";
+    }
+  };
+} // namespace
 
 std::size_t aoc::day14::part1(const std::string &filename)
 {

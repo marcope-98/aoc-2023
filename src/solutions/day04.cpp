@@ -7,13 +7,16 @@
 #include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
-static std::size_t matches(std::vector<std::size_t> &card)
+namespace
 {
-  std::size_t temp = card.size();
-  std::sort(card.begin(), card.end());
-  card.erase(std::unique(card.begin(), card.end()), card.end());
-  return (temp - card.size());
-}
+  std::size_t matches(std::vector<std::size_t> &card)
+  {
+    std::size_t temp = card.size();
+    std::sort(card.begin(), card.end());
+    card.erase(std::unique(card.begin(), card.end()), card.end());
+    return (temp - card.size());
+  }
+} // namespace
 
 std::size_t aoc::day04::part1(const std::string &filename)
 {

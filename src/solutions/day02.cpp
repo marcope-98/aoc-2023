@@ -5,28 +5,31 @@
 
 #include <unordered_map>
 
-static std::unordered_map<std::string, std::size_t> hashmap = {{"red", 12}, {"green", 13}, {"blue", 14}};
-
-static bool is_game_feasible(const std::string &input)
+namespace
 {
-  aoc::vstring game = aoc::parse::split_by_delimiters(input, ";, ");
-  for (std::size_t i = 0; i < game.size(); i += 2)
-    if (hashmap[game[i + 1]] < std::stoull(game[i]))
-      return false;
-  return true;
-}
+  std::unordered_map<std::string, std::size_t> hashmap = {{"red", 12}, {"green", 13}, {"blue", 14}};
 
-static std::size_t power(const std::string &input)
-{
-  std::unordered_map<std::string, std::size_t> memory = {{"red", 0}, {"green", 0}, {"blue", 0}};
+  bool is_game_feasible(const std::string &input)
+  {
+    aoc::vstring game = aoc::parse::split_by_delimiters(input, ";, ");
+    for (std::size_t i = 0; i < game.size(); i += 2)
+      if (hashmap[game[i + 1]] < std::stoull(game[i]))
+        return false;
+    return true;
+  }
 
-  aoc::vstring game = aoc::parse::split_by_delimiters(input, ";, ");
-  for (std::size_t i = 0; i < game.size(); i += 2)
-    if (memory[game[i + 1]] < std::stoull(game[i]))
-      memory[game[i + 1]] = std::stoull(game[i]);
+  std::size_t power(const std::string &input)
+  {
+    std::unordered_map<std::string, std::size_t> memory = {{"red", 0}, {"green", 0}, {"blue", 0}};
 
-  return memory["red"] * memory["green"] * memory["blue"];
-}
+    aoc::vstring game = aoc::parse::split_by_delimiters(input, ";, ");
+    for (std::size_t i = 0; i < game.size(); i += 2)
+      if (memory[game[i + 1]] < std::stoull(game[i]))
+        memory[game[i + 1]] = std::stoull(game[i]);
+
+    return memory["red"] * memory["green"] * memory["blue"];
+  }
+} // namespace
 
 std::size_t aoc::day02::part1(const std::string &filename)
 {

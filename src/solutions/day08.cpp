@@ -7,89 +7,92 @@
 #include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
-static std::size_t gcd(const std::size_t &a, const std::size_t &b)
+namespace
 {
-  if (b == 0) return a;
-  return gcd(b, a % b);
-}
-
-static std::size_t lcm(const std::size_t &a, const std::size_t &b) { return a / (gcd(a, b)) * b; }
-
-struct Dirs
-{
-  std::string left;
-  std::string right;
-};
-
-template<typename Key, typename Value>
-using HashMap = std::unordered_map<Key, Value>;
-
-static HashMap<std::string, Dirs> construct_graph(const aoc::vstring &input)
-{
-  HashMap<std::string, Dirs> graph;
-  for (const auto &line : input)
+  std::size_t gcd(const std::size_t &a, const std::size_t &b)
   {
-    aoc::vstring temp = aoc::parse::split_by_delimiters(line, "=(,)");
-    graph[temp[0]]    = {temp[1], temp[2]};
+    if (b == 0) return a;
+    return gcd(b, a % b);
   }
-  return graph;
-}
 
-static aoc::vstring get_starting_nodes(const HashMap<std::string, Dirs> &graph)
-{
-  aoc::vstring out;
-  for (const auto &node : graph)
-    if (node.first.back() == 'A')
-      out.emplace_back(node.first);
-  return out;
-}
+  std::size_t lcm(const std::size_t &a, const std::size_t &b) { return a / (gcd(a, b)) * b; }
 
-struct Node
-{
-  HashMap<std::string, std::size_t> hashmap;
-  std::string                       current;
-  bool                              loop_condition = false;
-  aoc::vstring                      visited;
-
-  Node() = default;
-  explicit Node(const std::string &node) : current{node} {}
-
-  bool ends_with_Z() const { return this->current.back() == 'Z'; }
-  bool is_ZZZ() const { return this->current == "ZZZ"; }
-  bool is_loop() const { return this->loop_condition; }
-
-  std::size_t loop() const { return this->visited.size() - this->hashmap.find(this->current)->second; }
-
-  void step(const std::string &sequence, const HashMap<std::string, Dirs> &graph)
+  struct Dirs
   {
-    if (this->hashmap.find(this->current) != this->hashmap.end())
+    std::string left;
+    std::string right;
+  };
+
+  template<typename Key, typename Value>
+  using HashMap = std::unordered_map<Key, Value>;
+
+  HashMap<std::string, Dirs> construct_graph(const aoc::vstring &input)
+  {
+    HashMap<std::string, Dirs> graph;
+    for (const auto &line : input)
     {
-      this->loop_condition = true;
-      this->current        = this->visited[hashmap[this->current]];
+      aoc::vstring temp = aoc::parse::split_by_delimiters(line, "=(,)");
+      graph[temp[0]]    = {temp[1], temp[2]};
     }
-    else
+    return graph;
+  }
+
+  aoc::vstring get_starting_nodes(const HashMap<std::string, Dirs> &graph)
+  {
+    aoc::vstring out;
+    for (const auto &node : graph)
+      if (node.first.back() == 'A')
+        out.emplace_back(node.first);
+    return out;
+  }
+
+  struct Node
+  {
+    HashMap<std::string, std::size_t> hashmap;
+    std::string                       current;
+    bool                              loop_condition = false;
+    aoc::vstring                      visited;
+
+    Node() = default;
+    explicit Node(const std::string &node) : current{node} {}
+
+    bool ends_with_Z() const { return this->current.back() == 'Z'; }
+    bool is_ZZZ() const { return this->current == "ZZZ"; }
+    bool is_loop() const { return this->loop_condition; }
+
+    std::size_t loop() const { return this->visited.size() - this->hashmap.find(this->current)->second; }
+
+    void step(const std::string &sequence, const HashMap<std::string, Dirs> &graph)
     {
-      std::string temp = this->current;
-      for (const auto &direction : sequence)
+      if (this->hashmap.find(this->current) != this->hashmap.end())
       {
-        Dirs dir = graph.find(temp)->second;
-        temp     = direction == 'L' ? dir.left : dir.right;
+        this->loop_condition = true;
+        this->current        = this->visited[hashmap[this->current]];
       }
+      else
+      {
+        std::string temp = this->current;
+        for (const auto &direction : sequence)
+        {
+          Dirs dir = graph.find(temp)->second;
+          temp     = direction == 'L' ? dir.left : dir.right;
+        }
 
-      hashmap[this->current] = this->visited.size();
-      this->visited.emplace_back(this->current);
-      this->current = temp;
+        hashmap[this->current] = this->visited.size();
+        this->visited.emplace_back(this->current);
+        this->current = temp;
+      }
     }
-  }
-};
+  };
 
-static bool all_loops(const std::vector<Node> &nodes)
-{
-  for (const auto &node : nodes)
-    if (!node.is_loop())
-      return false;
-  return true;
-}
+  bool all_loops(const std::vector<Node> &nodes)
+  {
+    for (const auto &node : nodes)
+      if (!node.is_loop())
+        return false;
+    return true;
+  }
+} // namespace
 
 std::size_t aoc::day08::part1(const std::string &filename)
 {
