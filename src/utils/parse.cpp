@@ -103,3 +103,14 @@ aoc::vstring aoc::parse::flipud(const vstring &input)
   std::reverse(out.begin(), out.end());
   return out;
 }
+
+std::size_t aoc::parse::empty_line_pos(const vstring &input)
+{
+  std::size_t res = 0;
+  for (const auto &line : input)
+    if (line.empty())
+      return res;
+    else
+      res++;
+  return res;
+}

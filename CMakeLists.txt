@@ -6,12 +6,16 @@ project(${LIBRARY_NAME} VERSION 1.0.0 LANGUAGES C CXX)
 
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake)
 
+set(MIN_EIGEN_VERSION 3.4)
+find_package(Eigen3 ${MIN_EIGEN_VERSION} REQUIRED NO_MODULE)
+
 set(AOC_SOLUTIONS_DIR src/solutions)
 
 add_library(${LIBRARY_NAME}
     STATIC
     src/utils/parse.cpp
     src/utils/Range.cpp
+    src/utils/Point.cpp
     ${AOC_SOLUTIONS_DIR}/day01.cpp
     ${AOC_SOLUTIONS_DIR}/day02.cpp
     ${AOC_SOLUTIONS_DIR}/day03.cpp
@@ -30,6 +34,13 @@ add_library(${LIBRARY_NAME}
     ${AOC_SOLUTIONS_DIR}/day16.cpp
     ${AOC_SOLUTIONS_DIR}/day17.cpp
     ${AOC_SOLUTIONS_DIR}/day18.cpp
+    ${AOC_SOLUTIONS_DIR}/day19.cpp
+    ${AOC_SOLUTIONS_DIR}/day20.cpp
+    ${AOC_SOLUTIONS_DIR}/day21.cpp
+    ${AOC_SOLUTIONS_DIR}/day22.cpp
+    ${AOC_SOLUTIONS_DIR}/day23.cpp
+    ${AOC_SOLUTIONS_DIR}/day24.cpp
+    ${AOC_SOLUTIONS_DIR}/day25.cpp
 )
 
 add_library(${LIBRARY_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
@@ -40,6 +51,11 @@ target_include_directories(${LIBRARY_NAME}
     $<INSTALL_INTERFACE:include>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(${LIBRARY_NAME}
+    PRIVATE
+    Eigen3::Eigen
 )
 
 target_compile_options(

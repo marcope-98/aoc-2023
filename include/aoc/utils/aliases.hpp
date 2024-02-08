@@ -8,7 +8,7 @@
 namespace aoc
 {
   using vstring = std::vector<std::string>;
-  using Matrix  = std::vector<std::vector<std::size_t>>;
+
 } // namespace aoc
 
 #endif

@@ -22,6 +22,7 @@ namespace aoc
     static std::string              concatenate(const vstring &input);
     static vstring                  fliplr(const vstring &input);
     static vstring                  flipud(const vstring &input);
+    static std::size_t              empty_line_pos(const vstring &input);
   };
 } // namespace aoc
 #endif // AOC_UTILS_PARSE_HPP_

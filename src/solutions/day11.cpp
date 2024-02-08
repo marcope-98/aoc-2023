@@ -2,20 +2,16 @@
 
 #include <iostream>
 
+#include "aoc/utils/Point.hpp"
 #include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
 namespace
 {
-  struct Point
-  {
-    std::size_t x, y;
-  };
-
   struct Universe
   {
-    std::vector<Point> nodes;
-    std::size_t        delta;
+    std::vector<aoc::Point> nodes;
+    std::size_t             delta;
 
     Universe() = default;
     Universe(const aoc::vstring &input, const std::size_t &increment) : delta{increment}
@@ -25,25 +21,16 @@ namespace
       for (std::size_t i = 0; i < height; ++i)
         for (std::size_t j = 0; j < width; ++j)
           if (input[i][j] == '#')
-            this->nodes.emplace_back(Point{j, i});
+            this->nodes.emplace_back(aoc::Point(j, i));
 
       this->expand(input);
-    }
-
-    std::size_t l1_norm(const std::size_t &start, const std::size_t &end) const
-    {
-      Point a    = this->nodes[start];
-      Point b    = this->nodes[end];
-      Point high = Point{a.x > b.x ? a.x : b.x, a.y > b.y ? a.y : b.y};
-      Point low  = Point{a.x < b.x ? a.x : b.x, a.y < b.y ? a.y : b.y};
-      return (high.x - low.x) + (high.y - low.y);
     }
 
     std::size_t shortest_path(const std::size_t start) const
     {
       std::size_t result = 0;
       for (std::size_t i = start + 1; i < this->nodes.size(); ++i)
-        result += l1_norm(start, i);
+        result += (this->nodes[start] - this->nodes[i]).abs().sum();
       return result;
     }
 
@@ -51,8 +38,7 @@ namespace
     {
       std::vector<std::size_t> out;
       for (std::size_t i = 0; i < input.size(); ++i)
-        if (input[i] == empty_string)
-          out.emplace_back(i);
+        if (input[i] == empty_string) out.emplace_back(i);
       return out;
     }
 
@@ -63,13 +49,13 @@ namespace
 
       for (int i = rows.size() - 1; i >= 0; --i)
         for (auto &node : this->nodes)
-          if (rows[i] < node.y)
-            node.y += this->delta;
+          if ((std::int64_t)rows[i] < node.y())
+            node.y() += this->delta;
 
       for (int i = cols.size() - 1; i >= 0; --i)
         for (auto &node : this->nodes)
-          if (cols[i] < node.x)
-            node.x += this->delta;
+          if ((std::int64_t)cols[i] < node.x())
+            node.x() += this->delta;
     }
   };
 } // namespace

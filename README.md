@@ -65,6 +65,14 @@ $ make -j4
 $ ./test/aoc_test
 ```
 
+By default the executable `./test/aoc_test` runs all tests. To run a test for a specific day or subsets use the command line argument `--gtest_list_tests` to list all available tests and `--gtest_filter=dayXX*` to run a specific day (replace XX with the number of the day).
+
+E.g.
+```console
+$ ./test/aoc_test --gtest_list_tests           # List all tests
+$ ./test/aoc_test --gtest_filter=day20*        # Run part1 and part2 of day20
+```
+
 Though suggestions and improvement are always welcome please bare in mind that:
 
 ![](https://github.com/marcope-98/aoc-2023/blob/master/media/IMG_0015.JPG)

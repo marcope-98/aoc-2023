@@ -23,7 +23,7 @@ namespace
 
   struct Map
   {
-    aoc::Matrix data;
+    std::vector<std::vector<std::size_t>> data;
 
     Map() = default;
     explicit Map(const aoc::vstring &input)

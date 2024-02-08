@@ -1,63 +1,25 @@
 #include "aoc/solutions/day10.hpp"
 
 #include <algorithm>
+#include <iostream>
 
+#include "aoc/utils/Point.hpp"
+#include "aoc/utils/Polygon.hpp"
 #include "aoc/utils/aliases.hpp"
 #include "aoc/utils/parse.hpp"
 
 namespace
 {
-  struct Point
+  bool collinear(const aoc::Point &a, const aoc::Point &b, const aoc::Point &c) { return ((a.x() == b.x() && b.x() == c.x()) || (a.y() == b.y() && b.y() == c.y())); }
+
+  aoc::Polygon simplify(const aoc::Polygon &polygon)
   {
-    std::size_t x = 0;
-    std::size_t y = 0;
-  };
-
-  using Polygon = std::vector<Point>;
-
-  bool collinear(const Point &a, const Point &b, const Point &c) { return ((a.x == b.x && b.x == c.x) || (a.y == b.y && b.y == c.y)); }
-
-  Polygon simplify(const Polygon &polygon)
-  {
-    Polygon out;
+    aoc::Polygon out;
     for (std::size_t i = 1; i < polygon.size() - 1; ++i)
-      if (!collinear(polygon[i - 1], polygon[i], polygon[i + 1]))
-        out.emplace_back(polygon[i]);
-    if (!collinear(polygon[polygon.size() - 2], polygon.back(), polygon.front()))
-      out.emplace_back(polygon.back());
-    if (!collinear(polygon.back(), polygon[0], polygon[1]))
-      out.emplace_back(polygon[0]);
+      if (!collinear(polygon[i - 1], polygon[i], polygon[i + 1])) out.emplace_back(polygon[i]);
+    if (!collinear(polygon[polygon.size() - 2], polygon.back(), polygon.front())) out.emplace_back(polygon.back());
+    if (!collinear(polygon.back(), polygon.front(), polygon[1])) out.emplace_back(polygon.front());
     return out;
-  }
-
-  bool intersects(const Point &point, const Point &edge1, const Point &edge2) { return (edge1.y < point.y && point.y < edge2.y) || (edge2.y < point.y && point.y < edge1.y); }
-
-  bool inside(const Point &point, const Polygon &polygon)
-  {
-    std::size_t intersections = 0;
-    for (std::size_t i = 0; i < polygon.size() - 1; ++i)
-    {
-      if (polygon[i].x > point.x)
-      {
-        if (collinear(point, polygon[i], polygon[i + 1]))
-        {
-          Point edge1 = (i == 0) ? polygon.back() : polygon[i - 1];
-          Point edge2 = (i == polygon.size() - 2) ? polygon.front() : polygon[i + 2];
-          intersections += std::size_t(intersects(point, edge1, edge2));
-        }
-        else
-          intersections += std::size_t(intersects(point, polygon[i], polygon[i + 1]));
-      }
-    }
-    // repeat for last point and first point
-    if (polygon.back().x > point.x)
-    {
-      if (collinear(point, polygon.back(), polygon.front()))
-        intersections += std::size_t(intersects(point, polygon[1], polygon[polygon.size() - 2]));
-      else
-        intersections += std::size_t(intersects(point, polygon.back(), polygon.front()));
-    }
-    return intersections % 2 != 0;
   }
 
   struct Maze
@@ -79,29 +41,29 @@ namespace
       }
     }
 
-    char at(const Point &point) const { return this->map[point.y][point.x]; }
+    char at(const aoc::Point &point) const { return this->map[point.y()][point.x()]; }
 
-    Point get_start() const
+    aoc::Point get_start() const
     {
-      Point point;
+      aoc::Point point;
       for (std::size_t i = 0; i < this->height; ++i)
         for (std::size_t j = 0; j < this->width; ++j)
           if (this->map[i][j] == 'S')
-            point = {j, i};
+            point = aoc::Point(j, i);
       return point;
     }
 
-    std::string get_moves(const Point &point) const
+    std::string get_moves(const aoc::Point &point) const
     {
       std::string moves = "";
-      if (point.x != 0) moves += 'W';
-      if (point.x != this->width - 1) moves += 'E';
-      if (point.y != 0) moves += 'N';
-      if (point.y != this->height - 1) moves += 'S';
+      if (point.x() != 0) moves += 'W';
+      if (point.x() != (std::int64_t)this->width - 1) moves += 'E';
+      if (point.y() != 0) moves += 'N';
+      if (point.y() != (std::int64_t)this->height - 1) moves += 'S';
       return moves;
     }
 
-    char update_move(const Point &point, const char &move) const
+    char update_move(const aoc::Point &point, const char &move) const
     {
       switch (this->at(point))
       {
@@ -123,39 +85,39 @@ namespace
       }
     }
 
-    Point update_point(const Point &point, const char &move) const
+    aoc::Point update_point(const aoc::Point &point, const char &move) const
     {
       switch (move)
       {
         case 'N':
-          return {point.x, point.y - 1};
+          return {point.x(), point.y() - 1};
         case 'S':
-          return {point.x, point.y + 1};
+          return {point.x(), point.y() + 1};
         case 'W':
-          return {point.x - 1, point.y};
+          return {point.x() - 1, point.y()};
         case 'E':
-          return {point.x + 1, point.y};
+          return {point.x() + 1, point.y()};
         default:
           return point;
       }
     }
 
-    void step(Point &point, char &move) const
+    void step(aoc::Point &point, char &move) const
     {
       move  = this->update_move(point, move);
       point = this->update_point(point, move);
     }
 
-    Polygon search() const
+    aoc::Polygon search() const
     {
-      Point                start = this->get_start();
-      std::string          moves = this->get_moves(start);
-      std::vector<Polygon> polygons;
+      aoc::Point                start = this->get_start();
+      std::string               moves = this->get_moves(start);
+      std::vector<aoc::Polygon> polygons;
       for (const auto &init : moves)
       {
-        Polygon temp;
-        char    move  = init;
-        Point   point = start;
+        aoc::Polygon temp;
+        char         move  = init;
+        aoc::Point   point = start;
         do
         {
           temp.emplace_back(point);
@@ -166,25 +128,17 @@ namespace
       }
 
       return *std::max_element(polygons.begin(), polygons.end(),
-                               [](const Polygon &a, const Polygon &b)
+                               [](const aoc::Polygon &a, const aoc::Polygon &b)
                                { return a.size() < b.size(); });
     }
 
-    std::size_t solve(const Polygon &polygon)
-    {
-      std::size_t result = 0;
-      for (std::size_t i = 0; i < this->height; ++i)
-        for (std::size_t j = 0; j < this->width; ++j)
-          if (this->map[i][j] == '.' && inside({j, i}, polygon))
-            result++;
-      return result;
-    }
-    void remap(const Polygon &polygon)
+    std::size_t solve(const aoc::Polygon &polygon) { return polygon.area() - polygon.perimeter() / 2 + 1; }
+    void        remap(const aoc::Polygon &polygon)
     {
       for (auto &line : this->map)
         line = std::string(this->width, '.');
       for (const auto &point : polygon)
-        this->map[point.y][point.x] = 'X';
+        this->map[point.y()][point.x()] = 'X';
     }
   };
 } // namespace
@@ -200,7 +154,7 @@ std::size_t aoc::day10::part2(const std::string &filename)
 {
   aoc::vstring input = aoc::parse::cvt_file_to_vstring(filename);
   Maze         maze(input);
-  Polygon      polygon = maze.search();
+  aoc::Polygon polygon = maze.search();
   maze.remap(polygon);
   polygon = simplify(polygon);
 
