@@ -152,7 +152,6 @@ std::size_t aoc::day25::part1(const std::string &filename)
   std::vector<Iteration> iterations;
   while (graph.nodes.size() > 2)
   {
-    std::cerr << graph.nodes.size() << "\n";
     Graph temp_graph = graph;
     iterations.emplace_back(temp_graph.step());
     std::string node1 = temp_graph.last;
@@ -168,12 +167,4 @@ std::size_t aoc::day25::part1(const std::string &filename)
   std::size_t res = aoc::parse::split_by_delimiters(it->supernode, ",").size();
 
   return res * (n_nodes - res);
-}
-
-std::size_t aoc::day25::part2(const std::string &filename)
-{
-  aoc::vstring input  = aoc::parse::cvt_file_to_vstring(filename);
-  std::size_t  result = 0;
-
-  return result;
 }

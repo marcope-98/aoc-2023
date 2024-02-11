@@ -9,7 +9,6 @@ namespace aoc
   struct day25
   {
     static std::size_t part1(const std::string &filename);
-    static std::size_t part2(const std::string &filename);
   };
 } // namespace aoc
 
